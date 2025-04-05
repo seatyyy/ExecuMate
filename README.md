@@ -1,10 +1,10 @@
 # ExecuMate - AI Executive Assistant
 
-ExecuMate is an intelligent executive assistant that helps users order food based on their schedule. It integrates with Google Calendar to provide proactive food ordering reminders before meetings and events.
+ExecuMate is an intelligent executive assistant that helps users order food based on their schedule. It integrates with Google Calendar to provide proactive food ordering reminders before meetings and events. ExecuMate uses Highrise AI for its natural language processing capabilities.
 
 ## Features
 
-- 🤖 AI-powered chat interface using OpenAI's models
+- 🤖 AI-powered chat interface using Highrise AI models
 - 📅 Google Calendar integration for schedule awareness
 - 🍔 Proactive food ordering reminders
 - ⏰ Smart timing for meal suggestions
@@ -39,7 +39,11 @@ ai_food_delivery/
 3. **Set up environment variables**
    Create a `.env` file in the project root with the following variables:
    ```
-   OPENAI_API_KEY=your_openai_api_key
+   # Highrise AI configuration
+   HIGHRISE_API_KEY=your_highrise_api_key
+   HIGHRISE_BASE_URL=https://api.highrise.ai/api/v1/ai
+   HIGHRISE_MODEL=meta-llama-3-8b-instruct  # Or your preferred Highrise model
+   
    SECRET_KEY=your_secret_key
    GOOGLE_CLIENT_SECRET_FILE=path_to_client_secret.json
    GOOGLE_REDIRECT_URI=http://localhost:5000/api/callback/google
@@ -72,5 +76,5 @@ ai_food_delivery/
 
 - **Backend**: Python, Flask, SocketIO
 - **Frontend**: HTML, CSS, JavaScript
-- **APIs**: OpenAI API, Google Calendar API
+- **APIs**: Highrise AI API, Google Calendar API
 - **Data Storage**: Local file storage for credentials

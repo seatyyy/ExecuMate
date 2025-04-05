@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, session
 from flask_socketio import SocketIO
 import os
 import json
-import openai
+from openai import OpenAI
 import datetime
 from dateutil import parser
 from google_calendar import GoogleCalendarAPI
@@ -18,8 +18,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Initialize OpenAI
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Initialize Highrise AI client
+highrise_api_key = os.getenv('HIGHRISE_API_KEY')
+highrise_base_url = os.getenv('HIGHRISE_BASE_URL', 'https://cloud.highrise.ai/highrise-api/maas/ai')
+
+# Create OpenAI client configured to use Highrise
+client = OpenAI(
+    api_key=highrise_api_key,
+    base_url=highrise_base_url
+)
 
 # Initialize Google Calendar API
 calendar_api = GoogleCalendarAPI()
@@ -88,12 +95,13 @@ def generate_response(message, user_id):
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(user_state[user_id]["conversation_history"][-10:])  # Keep last 10 messages
         
-        # Get response from OpenAI
-        response = openai.chat.completions.create(
-            model="gpt-4",
+        # Get response from Highrise AI using OpenAI-compatible API
+        response = client.chat.completions.create(
+            model=os.getenv('HIGHRISE_MODEL', 'DeepSeek-R1'),  # Using the model from the curl command
             messages=messages,
-            max_tokens=500,
-            temperature=0.7
+            max_tokens=128,
+            temperature=0.5,
+            top_p=0.5
         )
         
         assistant_message = response.choices[0].message.content
