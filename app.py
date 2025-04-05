@@ -25,6 +25,12 @@ highrise_model = os.getenv('HIGHRISE_MODEL', 'DeepSeek-R1')
 
 # No OpenAI client needed - using direct requests to Highrise API
 
+# Import Blueprints
+from api.doordash_routes import doordash_bp
+
+# Register Blueprints
+app.register_blueprint(doordash_bp)
+
 # Initialize Google Calendar API
 calendar_api = GoogleCalendarAPI()
 
