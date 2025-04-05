@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 venv/
 .env
 **/**/__pycache__
+=======
+api/__pycache__/*
+__pycache__/*
+.env
+>>>>>>> e8dfde3 (gitignore .env)
