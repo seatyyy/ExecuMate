@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // User ID (in production, use a real user authentication system)
     const userId = 'default_user';
     
+    // Function to generate a unique ID
+    function generateUniqueId() {
+        return 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+    
     // Auto-resize input field
     userInput.addEventListener('input', function() {
         this.style.height = 'auto';
@@ -51,6 +56,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Connect Google Calendar
     connectCalendarButton.addEventListener('click', connectCalendar);
     
+    // Track previous messages to avoid duplicates
+    const messageHistory = new Set();
+    
     // Socket events
     socket.on('connect', function() {
         console.log('Connected to server');
@@ -60,9 +68,44 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Disconnected from server');
     });
     
+    // Set to track processed message IDs to prevent duplicates
+    const processedMessageIds = new Set();
+    
     socket.on('response', function(data) {
+        console.log('Received response:', data);
+        
         if (data.user_id === userId) {
+            // Check if this is a message with an ID we can track
+            if (data.message_id) {
+                // If we've already processed this exact message ID, ignore it
+                if (processedMessageIds.has(data.message_id)) {
+                    console.log('Ignoring duplicate message with ID:', data.message_id);
+                    return;
+                }
+                
+                // Mark this message as processed
+                processedMessageIds.add(data.message_id);
+                
+                // Prevent set from growing too large
+                if (processedMessageIds.size > 100) {
+                    // Convert to array, keep only the most recent 50 IDs
+                    const recentIds = Array.from(processedMessageIds).slice(-50);
+                    processedMessageIds.clear();
+                    recentIds.forEach(id => processedMessageIds.add(id));
+                }
+            } else {
+                // For messages without IDs, use content-based deduplication (fallback)
+                const contentId = `content_${data.response.substring(0, 50)}`;
+                if (messageHistory.has(contentId)) {
+                    console.log('Duplicate content prevented:', contentId);
+                    return;
+                }
+                messageHistory.add(contentId);
+            }
+            
+            // Add the message to the UI
             addMessage('assistant', data.response);
+            
             // Remove typing indicator if present
             const typingIndicator = document.querySelector('.typing');
             if (typingIndicator) {
@@ -88,10 +131,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show typing indicator
             addTypingIndicator();
             
-            // Send message to server
+            // Send message to server with a unique message ID
+            const messageId = generateUniqueId();
             socket.emit('message', {
                 message: message,
-                user_id: userId
+                user_id: userId,
+                message_id: messageId
             });
             
             // Clear input
