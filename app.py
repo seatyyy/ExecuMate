@@ -11,7 +11,7 @@ import time
 import requests
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True) # Force load/override from .env
 
 # Initialize Flask app
 app = Flask(__name__)
