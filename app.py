@@ -28,6 +28,12 @@ client = OpenAI(
     base_url=highrise_base_url
 )
 
+# Import Blueprints
+from api.doordash_routes import doordash_bp
+
+# Register Blueprints
+app.register_blueprint(doordash_bp)
+
 # Initialize Google Calendar API
 calendar_api = GoogleCalendarAPI()
 
@@ -185,4 +191,4 @@ if __name__ == '__main__':
     calendar_thread.start()
     
     # Start the Flask app
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    socketio.run(app, debug=True, host='localhost', port=os.getenv('PORT', 5000))
