@@ -58,6 +58,11 @@ ai_food_delivery/
    - Update the path in your `.env` file
 
 5. **Run the application**
+
+If you want to use CDP, start chrome in CDP mode: 
+   ```
+   /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
+   ```
    ```
    python app.py
    ```
