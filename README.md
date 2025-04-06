@@ -47,6 +47,9 @@ ai_food_delivery/
    SECRET_KEY=your_secret_key
    GOOGLE_CLIENT_SECRET_FILE=path_to_client_secret.json
    GOOGLE_REDIRECT_URI=http://localhost:5000/api/callback/google
+   
+   # To mock browser agent behaviour
+   MOCK_BROWSER_AGENT=true
    ```
 
 4. **Set up Google Calendar API**

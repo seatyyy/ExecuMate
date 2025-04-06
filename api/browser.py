@@ -1,5 +1,7 @@
 import asyncio
 import json
+import os
+from distutils.util import strtobool
 
 from browser_use.agent.service import Agent, Controller
 from browser_use.browser.browser import Browser, BrowserConfig
@@ -7,6 +9,35 @@ from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
 from typing_extensions import Callable, Awaitable
+
+
+MOCK_BROWSER_AGENT = strtobool(os.environ.get("MOCK_BROWSER_AGENT", "True"))
+
+MOCK_ITEMS = {
+  "menu_items": [
+    {
+      "item_name": "Chicken Kebab",
+      "restaurant_name": "Hummus Mediterranean Kitchen",
+      "price": 20.25,
+      "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
+      "image_url": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,format=auto,width=800,quality=50/https://doordash-static.s3.amazonaws.com/media/photos/240ebad9-dce0-4a06-874b-7126c9694208-retina-large.jpg"
+    },
+    {
+      "item_name": "Chips & Salsa",
+      "restaurant_name": "Hummus Mediterranean Kitchen",
+      "price": 3.5,
+      "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
+      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/yelp/9b23282a-01f7-4169-bbd2-8a5ee8bdea67.jpg"
+    },
+    {
+      "item_name": "Crepevine Club",
+      "restaurant_name": "Hummus Mediterranean Kitchen",
+      "price": 22.95,
+      "restaurant_url": "https://www.doordash.com/store/34196?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxNzddfQ==&pickup=false",
+      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/photos/137616b9-2018-46ae-8e8a-07d0860926a8-retina-large-jpeg"
+    }
+  ]
+}
 
 
 class MenuItem(BaseModel):
@@ -60,6 +91,10 @@ async def find_something(query: str):
 
 
 async def find_2_lunch_options():
+
+    if MOCK_BROWSER_AGENT:
+        return MOCK_ITEMS
+
     task = f"""
     0. Start by going to: https://www.doordash.com/home
     2. Scroll to 'Try something new' section
@@ -98,6 +133,9 @@ async def order_food(restaurant_url: str, item_name: str) -> str:
         item_name: Name of the item to order
     """
 
+    if MOCK_BROWSER_AGENT:
+        return f"Order for '{item_name}' started. Your order is being processed."
+
     task = f"""
 1. Go to {restaurant_url}
 2. Put into search field the name of the item: {item_name}
@@ -126,37 +164,13 @@ async def perform_order(task: str):
     except Exception as e:
         return "Error when doing the order"
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # asyncio.run(find_2_lunch_options())
-    # items = {
-    #   "menu_items": [
-    #     {
-    #       "item_name": "Chicken Kebab",
-    #       "restaurant_name": "Hummus Mediterranean Kitchen",
-    #       "price": 20.25,
-    #       "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
-    #       "image_url": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,format=auto,width=800,quality=50/https://doordash-static.s3.amazonaws.com/media/photos/240ebad9-dce0-4a06-874b-7126c9694208-retina-large.jpg"
-    #     },
-    #     {
-    #       "item_name": "Chips & Salsa",
-    #       "restaurant_name": "Hummus Mediterranean Kitchen",
-    #       "price": 3.5,
-    #       "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
-    #       "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/yelp/9b23282a-01f7-4169-bbd2-8a5ee8bdea67.jpg"
-    #     },
-    #     {
-    #       "item_name": "Crepevine Club",
-    #       "restaurant_name": "Hummus Mediterranean Kitchen",
-    #       "price": 22.95,
-    #       "restaurant_url": "https://www.doordash.com/store/34196?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxNzddfQ==&pickup=false",
-    #       "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/photos/137616b9-2018-46ae-8e8a-07d0860926a8-retina-large-jpeg"
-    #     }
-    #   ]
-    # }
 
-    # asyncio.run(order_food(MenuItem(
-    #     items["menu_items"][0]["restaurant_url"], items["menu_items"][0]["item_name"]
-    # )))
+    # asyncio.run(order_food(
+    #     restaurant_url=MOCK_ITEMS["menu_items"][0]["restaurant_url"],
+    #     item_name=MOCK_ITEMS["menu_items"][0]["item_name"]
+    # ))
 
-    asyncio.run(order_food(restaurant_url="https://www.doordash.com/store/paris-baguette-san-mateo-27651459/39908751/?cursor=eyJzZWFyY2hfaXRlbV9jYXJvdXNlbF9jdXJzb3IiOnsicXVlcnkiOiJjaGVlc2UgY2FrZSIsIml0ZW1faWRzIjpbMTcyODU3NTUyNjAsMTcyODU3NTUyNjIsMjQ0MDE0OTEyMTVdLCJzZWFyY2hfdGVybSI6ImNoZWVzZWNha2UiLCJ2ZXJ0aWNhbF9pZCI6LTk5OSwidmVydGljYWxfbmFtZSI6ImFsbCJ9LCJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxNDQsMTc2LDE3NywxOTMsMTk1LDI4NF19&pickup=false",
-                            item_name="NY Style Cheesecake Slice"))
+    # asyncio.run(order_food(restaurant_url="https://www.doordash.com/store/paris-baguette-san-mateo-27651459/39908751/?cursor=eyJzZWFyY2hfaXRlbV9jYXJvdXNlbF9jdXJzb3IiOnsicXVlcnkiOiJjaGVlc2UgY2FrZSIsIml0ZW1faWRzIjpbMTcyODU3NTUyNjAsMTcyODU3NTUyNjIsMjQ0MDE0OTEyMTVdLCJzZWFyY2hfdGVybSI6ImNoZWVzZWNha2UiLCJ2ZXJ0aWNhbF9pZCI6LTk5OSwidmVydGljYWxfbmFtZSI6ImFsbCJ9LCJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxNDQsMTc2LDE3NywxOTMsMTk1LDI4NF19&pickup=false",
+    #                         item_name="NY Style Cheesecake Slice"))
