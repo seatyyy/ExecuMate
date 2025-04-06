@@ -1,10 +1,13 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
+from pydantic import BaseModel
+
 from api.browser import find_2_lunch_options, order_food
 from logging import getLogger
 from traceback import format_exc
 
 
 logger = getLogger(__name__)
+
 
 # Create a Blueprint for DoorDash routes
 doordash_bp = Blueprint('doordash_bp', __name__, url_prefix='/doordash')
@@ -20,9 +23,10 @@ async def index():
     return jsonify(result)
 
 @doordash_bp.route('/order', methods=['POST'])
-async def make_order(item_name: str, restaurant_url: str = None):
+async def make_order():
     try:
-        result = await order_food(restaurant_url, item_name)
+        data = request.get_json()
+        result = await order_food(data.get("restaurant_url"), data.get("item_name"))
     except Exception as e:
         logger.error("Cannot order food", exc_info=e)
         result = {"error": "Cannot order food"}
