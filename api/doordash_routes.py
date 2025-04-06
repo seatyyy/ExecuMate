@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from api.browser import find_2_lunch_options
+from api.browser import find_2_lunch_options, order_food
 from logging import getLogger
 from traceback import format_exc
 
@@ -19,15 +19,12 @@ async def index():
 
     return jsonify(result)
 
-# Add other DoorDash specific routes here later
-# e.g., @doordash_bp.route('/orders', methods=['GET'])
-# def get_orders():
-#     # Logic to get DoorDash orders
-#     return jsonify({"orders": []})
+@doordash_bp.route('/order', methods=['POST'])
+async def make_order(item_name: str, restaurant_url: str = None):
+    try:
+        result = await order_food(restaurant_url, item_name)
+    except Exception as e:
+        logger.error("Cannot order food", exc_info=e)
+        result = {"error": "Cannot order food"}
 
-
-# """
-#         1. Go to ubereats.com
-#         2. Click the hamburger menu on the left, then "Orders"
-#         3. Tell me the last restaurant I ordered from
-#         """,
+    return jsonify(result)
