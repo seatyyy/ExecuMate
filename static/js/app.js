@@ -103,14 +103,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageHistory.add(contentId);
             }
             
-            // Add the message to the UI
-            addMessage('assistant', data.response);
-            
-            // Remove typing indicator if present
-            const typingIndicator = document.querySelector('.typing');
-            if (typingIndicator) {
-                typingIndicator.remove();
-            }
+            // Add a slight delay to make it feel more natural
+            setTimeout(() => {
+                // Add the message to the UI
+                addMessage('assistant', data.response);
+                
+                // Remove typing indicator if present
+                const typingIndicator = document.querySelector('.typing');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+                
+                // If this is the initial message, add food options
+                if (data.message_id === 'initial') {
+                    const foodItems = {
+                        item1: {
+                            name: 'Grilled Chicken Caesar Salad',
+                            restaurant: 'Fresh & Co',
+                            price: '$12.99',
+                            image_url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
+                        },
+                        item2: {
+                            name: 'Spicy Tuna Roll Combo',
+                            restaurant: 'Sushi Palace',
+                            price: '$15.99',
+                            image_url: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c'
+                        }
+                    };
+                    setTimeout(() => addFoodOptions(foodItems.item1, foodItems.item2), 500);
+                }
+            }, 500);
         }
     });
     
@@ -272,40 +294,6 @@ document.addEventListener('DOMContentLoaded', function() {
         messagesContainer.appendChild(foodOptions);
         scrollToBottom();
     }
-    
-    // Add animation when receiving messages
-    socket.on('response', function(data) {
-        if (data.user_id === userId) {
-            // Add a slight delay to make it feel more natural
-            setTimeout(() => {
-                addMessage('assistant', data.response);
-                // Remove typing indicator if present
-                const typingIndicator = document.querySelector('.typing');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-                
-                // If this is the initial message, add food options
-                if (data.message_id === 'initial') {
-                    const foodItems = {
-                        item1: {
-                            name: 'Grilled Chicken Caesar Salad',
-                            restaurant: 'Fresh & Co',
-                            price: '$12.99',
-                            image_url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
-                        },
-                        item2: {
-                            name: 'Spicy Tuna Roll Combo',
-                            restaurant: 'Sushi Palace',
-                            price: '$15.99',
-                            image_url: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c'
-                        }
-                    };
-                    setTimeout(() => addFoodOptions(foodItems.item1, foodItems.item2), 500);
-                }
-            }, 500);
-        }
-    });
     
     function connectCalendar() {
         // Add a subtle loading animation to the button
