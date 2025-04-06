@@ -180,6 +180,39 @@ document.addEventListener('DOMContentLoaded', function() {
             sendButton.classList.remove('active');
         }
     });
+
+    // Function to add food options
+    function addFoodOptions() {
+        const foodOptionsTemplate = document.getElementById('food-options-template');
+        const foodOptions = foodOptionsTemplate.content.cloneNode(true);
+        
+        // Set food item 1 details
+        const card1 = foodOptions.querySelector('.food-card:first-child');
+        card1.querySelector('img').src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c';
+        card1.querySelector('h3').textContent = 'Grilled Chicken Caesar Salad';
+        card1.querySelector('p em').textContent = 'Fresh & Co';
+        card1.querySelector('.price').textContent = '$12.99';
+        
+        // Set food item 2 details
+        const card2 = foodOptions.querySelector('.food-card:last-child');
+        card2.querySelector('img').src = 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c';
+        card2.querySelector('h3').textContent = 'Spicy Tuna Roll Combo';
+        card2.querySelector('p em').textContent = 'Sushi Palace';
+        card2.querySelector('.price').textContent = '$15.99';
+        
+        // Add click handlers for the buttons
+        card1.querySelector('button').addEventListener('click', () => {
+            sendMessage('I would like to order the Grilled Chicken Caesar Salad from Fresh & Co');
+        });
+        
+        card2.querySelector('button').addEventListener('click', () => {
+            sendMessage('I would like to order the Spicy Tuna Roll Combo from Sushi Palace');
+        });
+        
+        // Add the food options to the messages container
+        messagesContainer.appendChild(foodOptions);
+        scrollToBottom();
+    }
     
     // Send message on button click
     sendButton.addEventListener('click', sendMessage);
