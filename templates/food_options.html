@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Options</title>
+    <!-- Link to your existing stylesheet or add styles here -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Basic card styling (add more in style.css if needed) */
+        .card-container {
+            display: flex; /* Use flexbox to arrange cards */
+            gap: 20px; /* Space between cards */
+            justify-content: center; /* Center cards horizontally */
+            flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+            margin-top: 20px;
+        }
+        .food-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            width: 250px; /* Adjust width as needed */
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .food-card img {
+            max-width: 100%;
+            height: 150px; /* Fixed height for consistency */
+            object-fit: cover; /* Ensure image covers the area */
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .food-card h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+        .food-card p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .food-card .price {
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+        .food-card button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .food-card button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Display the chat message -->
+        {% if message %}
+        <div class="message">
+            <p>{{ message }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Container for the food cards -->
+        <div class="card-container">
+            <!-- Food Item Card 1 -->
+            {% if item1 %}
+            <div class="food-card">
+                <img src="{{ item1.image_url }}" alt="{{ item1.name }} Photo">
+                <h3>{{ item1.name }}</h3>
+                <p><em>{{ item1.restaurant }}</em></p>
+                <p class="price">{{ item1.price }}</p>
+                <button>Choose</button>
+            </div>
+            {% endif %}
+
+            <!-- Food Item Card 2 -->
+            {% if item2 %}
+            <div class="food-card">
+                <img src="{{ item2.image_url }}" alt="{{ item2.name }} Photo">
+                <h3>{{ item2.name }}</h3>
+                <p><em>{{ item2.restaurant }}</em></p>
+                <p class="price">{{ item2.price }}</p>
+                <button>Choose</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
