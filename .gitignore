@@ -1,3 +1,6 @@
 api/__pycache__/*
 __pycache__/*
 .env
+.idea
+.venv
+venv
