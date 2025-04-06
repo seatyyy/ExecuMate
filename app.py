@@ -63,6 +63,17 @@ def handle_connect():
     print('Client connected')
     join_room(request.sid)
     print(f"Client {request.sid} joined their own room")
+    
+    # Send initial welcome message
+    # initial_message = """Hello! It's lunch time"""
+    
+    # emit('response', 
+    #      {'response': initial_message, 'user_id': 'default_user', 'message_id': 'initial'},
+    #      room=request.sid)
+    
+    # emit('response', 
+    # {'response': "here are your lunch options", 'user_id': 'default_user', 'message_id': 'show_food_options'},
+    # room=request.sid)
 
 @socketio.on('disconnect')
 def handle_disconnect():
