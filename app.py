@@ -49,17 +49,6 @@ def index():
     # No longer requiring login overlay
     return render_template('index.html')
 
-# Removing duplicate API endpoint - using only WebSockets now
-# @app.route('/api/message', methods=['POST'])
-# def receive_message():
-#     data = request.json
-#     user_message = data.get('message', '')
-#     user_id = data.get('user_id', 'default_user')
-#     
-#     # Get response from LLM
-#     response = generate_response(user_message, user_id)
-#     
-#     return jsonify({'response': response})
 
 @socketio.on('order')
 def handle_order(data):
@@ -101,11 +90,6 @@ def handle_connect():
 def handle_disconnect():
     leave_room(request.sid)
     print(f"Client {request.sid} disconnected")
-
-@socketio.on('order')
-def handle_order(data):
-    print(f"Order received: {data['name']} from {data['restaurant']}")
-    print(f"Order URL: {data['url']}")
 
 @socketio.on('message')
 def handle_message(data):
