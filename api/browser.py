@@ -20,21 +20,24 @@ MOCK_ITEMS = {
       "restaurant_name": "Hummus Mediterranean Kitchen",
       "price": 20.25,
       "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
-      "image_url": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,format=auto,width=800,quality=50/https://doordash-static.s3.amazonaws.com/media/photos/240ebad9-dce0-4a06-874b-7126c9694208-retina-large.jpg"
+      "image_url": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,format=auto,width=800,quality=50/https://doordash-static.s3.amazonaws.com/media/photos/240ebad9-dce0-4a06-874b-7126c9694208-retina-large.jpg",
+      "delivery_time": "25 min"
     },
     {
       "item_name": "Chips & Salsa",
       "restaurant_name": "Hummus Mediterranean Kitchen",
       "price": 3.5,
       "restaurant_url": "https://www.doordash.com/store/902?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxMDAzMzIsMTc1LDE3NiwxNzcsMTc5LDE5MywxOTVdfQ==&pickup=false",
-      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/yelp/9b23282a-01f7-4169-bbd2-8a5ee8bdea67.jpg"
+      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/yelp/9b23282a-01f7-4169-bbd2-8a5ee8bdea67.jpg",
+      "delivery_time": "25 min"
     },
     {
       "item_name": "Crepevine Club",
       "restaurant_name": "Hummus Mediterranean Kitchen",
       "price": 22.95,
       "restaurant_url": "https://www.doordash.com/store/34196?cursor=eyJzdG9yZV9wcmltYXJ5X3ZlcnRpY2FsX2lkcyI6WzEsNCwxNzddfQ==&pickup=false",
-      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/photos/137616b9-2018-46ae-8e8a-07d0860926a8-retina-large-jpeg"
+      "image_url": "https://img.cdn4dd.com/p/fit=cover,width=1200,format=auto,quality=50/media/photos/137616b9-2018-46ae-8e8a-07d0860926a8-retina-large-jpeg",
+      "delivery_time": "25 min"
     }
   ]
 }
