@@ -233,31 +233,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Function to add food options
-    function addFoodOptions() {
+    function addFoodOptions(item1, item2) {
         const foodOptionsTemplate = document.getElementById('food-options-template');
         const foodOptions = foodOptionsTemplate.content.cloneNode(true);
         
         // Set food item 1 details
         const card1 = foodOptions.querySelector('.food-card:first-child');
-        card1.querySelector('img').src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c';
-        card1.querySelector('h3').textContent = 'Grilled Chicken Caesar Salad';
-        card1.querySelector('p em').textContent = 'Fresh & Co';
-        card1.querySelector('.price').textContent = '$12.99';
+        card1.querySelector('img').src = item1.image_url;
+        card1.querySelector('h3').textContent = item1.name;
+        card1.querySelector('p em').textContent = item1.restaurant;
+        card1.querySelector('.price').textContent = item1.price;
         
         // Set food item 2 details
         const card2 = foodOptions.querySelector('.food-card:last-child');
-        card2.querySelector('img').src = 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c';
-        card2.querySelector('h3').textContent = 'Spicy Tuna Roll Combo';
-        card2.querySelector('p em').textContent = 'Sushi Palace';
-        card2.querySelector('.price').textContent = '$15.99';
+        card2.querySelector('img').src = item2.image_url;
+        card2.querySelector('h3').textContent = item2.name;
+        card2.querySelector('p em').textContent = item2.restaurant;
+        card2.querySelector('.price').textContent = item2.price;
         
         // Add click handlers for the buttons
         card1.querySelector('button').addEventListener('click', () => {
-            sendMessage('I would like to order the Grilled Chicken Caesar Salad from Fresh & Co');
+            sendMessage(`I would like to order the ${item1.name} from ${item1.restaurant}`);
         });
         
         card2.querySelector('button').addEventListener('click', () => {
-            sendMessage('I would like to order the Spicy Tuna Roll Combo from Sushi Palace');
+            sendMessage(`I would like to order the ${item2.name} from ${item2.restaurant}`);
         });
         
         // Add the food options to the messages container
@@ -278,8 +278,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // If this is the initial message, add food options
-                if (data.message_id === 'show_food_options') {
-                    setTimeout(addFoodOptions, 500);
+                if (data.message_id === 'initial') {
+                    const foodItems = {
+                        item1: {
+                            name: 'Grilled Chicken Caesar Salad',
+                            restaurant: 'Fresh & Co',
+                            price: '$12.99',
+                            image_url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
+                        },
+                        item2: {
+                            name: 'Spicy Tuna Roll Combo',
+                            restaurant: 'Sushi Palace',
+                            price: '$15.99',
+                            image_url: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c'
+                        }
+                    };
+                    setTimeout(() => addFoodOptions(foodItems.item1, foodItems.item2), 500);
                 }
             }, 500);
         }
