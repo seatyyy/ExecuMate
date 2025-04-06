@@ -64,12 +64,16 @@ def handle_connect():
     join_room(request.sid)
     print(f"Client {request.sid} joined their own room")
     
-    # Send initial welcome message
-    # initial_message = """Hello! It's lunch time"""
+    # Send initial welcome message with food options
+    initial_message = """Hello! I'll ping you when it's lunch time"""
     
-    # emit('response', 
-    #      {'response': initial_message, 'user_id': 'default_user', 'message_id': 'initial'},
-    #      room=request.sid)
+    emit('response', 
+         {
+             'response': initial_message,
+             'user_id': 'default_user',
+             'message_id': 'initial',
+         },
+         room=request.sid)
     
     # emit('response', 
     # {'response': "here are your lunch options", 'user_id': 'default_user', 'message_id': 'show_food_options'},
@@ -105,13 +109,32 @@ def handle_message(data):
         if len(message_ids) > 1000:
             message_ids.clear()
     
-    # Get response from LLM
-    response = generate_response(user_message, user_id)
-    
-    # Send response back only to the requesting client using their room
-    emit('response', 
-         {'response': response, 'user_id': user_id, 'message_id': message_id},
-         room=request.sid)
+    if user_message == "show food options":
+        food_options = {
+            'item1': {
+                'name': 'Grilled Chicken Caesar Salad',
+                'restaurant': 'Fresh & Co',
+                'price': '$12.99',
+                'image_url': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
+            },
+            'item2': {
+                'name': 'Spicy Tuna Roll Combo',
+                'restaurant': 'Sushi Palace',
+                'price': '$15.99',
+                'image_url': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c'
+            }
+        }
+        emit('response', 
+             {'response': 'Here you go', 'user_id': user_id, 'message_id': message_id, 'food_options': food_options},
+             room=request.sid)
+    else:
+        # Get response from LLM
+        response = generate_response(user_message, user_id)
+        
+        # Send response back only to the requesting client using their room
+        emit('response', 
+            {'response': response, 'user_id': user_id, 'message_id': message_id},
+            room=request.sid)
 
 def generate_response(message, user_id):
     try:

@@ -114,23 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     typingIndicator.remove();
                 }
                 
-                // If this is the initial message, add food options
-                if (data.message_id === 'initial') {
-                    const foodItems = {
-                        item1: {
-                            name: 'Grilled Chicken Caesar Salad',
-                            restaurant: 'Fresh & Co',
-                            price: '$12.99',
-                            image_url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
-                        },
-                        item2: {
-                            name: 'Spicy Tuna Roll Combo',
-                            restaurant: 'Sushi Palace',
-                            price: '$15.99',
-                            image_url: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c'
-                        }
-                    };
-                    setTimeout(() => addFoodOptions(foodItems.item1, foodItems.item2), 500);
+                // Check if the response includes food options
+                if (data.food_options) {
+                    setTimeout(() => addFoodOptions(data.food_options.item1, data.food_options.item2), 500);
                 }
             }, 500);
         }
