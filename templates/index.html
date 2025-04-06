@@ -6,9 +6,39 @@
     <title>ExecuMate - Your AI Executive Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index-style.css') }}">
     <style>
-        .food-options-container {
+        :root {
+            --primary-color: #5E72E4;
+            --accent-color: #11CDEF;
+            --light-accent: rgba(17, 205, 239, 0.1);
+            --dark-color: #32325D;
+            --text-color: #525F7F;
+            --light-text: #8898AA;
+            --border-color: #E9ECEF;
+            --bg-color: #F8F9FE;
+            --bubble-user: #5E72E4;
+            --bubble-assistant: #F7FAFC;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .food-options-container {
             display: flex;
             gap: 20px;
             justify-content: center;
@@ -60,6 +90,535 @@
         .food-card button:hover {
             background-color: var(--dark-color);
         }
+
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            height: 90vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .app-info h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 4px;
+        }
+
+        .app-info p {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .connect-btn {
+            background: var(--light-accent);
+            color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connect-btn i {
+            font-size: 1rem;
+        }
+
+        .connect-btn:hover {
+            background: rgba(17, 205, 239, 0.2);
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background-image: linear-gradient(180deg, rgba(94, 114, 228, 0.03) 0%, rgba(17, 205, 239, 0.03) 100%);
+        }
+
+        .message {
+            display: flex;
+            max-width: 80%;
+        }
+
+        .message.user {
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            margin-right: auto;
+        }
+
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .message.user .message-content {
+            background: var(--bubble-user);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-content {
+            background: var(--bubble-assistant);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.assistant .message-content::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            opacity: 0.1;
+            left: -10px;
+            top: -10px;
+            z-index: -1;
+        }
+
+        .input-container {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        #user-input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease;
+            max-height: 120px;
+            color: var(--text-color);
+        }
+
+        #user-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #user-input::placeholder {
+            color: var(--light-text);
+        }
+
+        #send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        #send-btn:hover {
+            transform: translateY(-2px);
+            background: #4a5bd0;
+        }
+
+        #send-btn:active {
+            transform: translateY(0);
+        }
+
+        #send-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Typing indicator */
+        .typing {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            width: fit-content;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        .typing span {
+            width: 8px;
+            height: 8px;
+            background-color: var(--light-text);
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Reminder notification */
+        .reminder {
+            background: white;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .reminder-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+
+        .reminder-title i {
+            color: var(--accent-color);
+        }
+
+        .reminder-content {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reminder-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reminder-btn.accept {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .reminder-btn.decline {
+            background: white;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .reminder-btn.accept:hover {
+            background: #4a5bd0;
+            transform: translateY(-1px);
+        }
+
+        .reminder-btn.decline:hover {
+            background: var(--bg-color);
+            transform: translateY(-1px);
+        }
+
+        /* Custom scrollbar */
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background-color: rgba(136, 152, 170, 0.5);
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(136, 152, 170, 0.8);
+        }
+
+        /* Calendar View Styles */
+        .calendar-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .calendar-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .calendar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 90;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-container.active {
+            transform: translateX(0);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .calendar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .calendar-close {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .calendar-range-selector {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .calendar-range-selector select {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            cursor: pointer;
+            appearance: none;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238898AA' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .calendar-range-selector select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .calendar-events {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .calendar-date {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .calendar-event {
+            background: white;
+            border-left: 3px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .calendar-event-time {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-bottom: 4px;
+        }
+
+        .calendar-event-title {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 6px;
+        }
+
+        .calendar-event-location {
+            font-size: 0.85rem;
+            color: var(--text-color);
+        }
+
+        .no-events {
+            text-align: center;
+            color: var(--light-text);
+            padding: 30px;
+        }
+
+        /* Media queries */
+        @media (max-width: 480px) {
+            .app-container {
+                height: 100vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 500px;
+            }
+        }
+
+        /* Add login overlay styles */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(50, 50, 93, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-container h2 {
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .login-container p {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .login-container img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .google-login-btn {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.2s ease;
+        }
+
+        .google-login-btn:hover {
+            background-color: #3367D6;
+            transform: translateY(-2px);
+        }
+
+        .google-login-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -69,13 +628,23 @@
                 <h1>ExecuMate</h1>
                 <p>Your AI Executive Assistant</p>
             </div>
-            <button id="connect-calendar" class="connect-btn">
-                <i class="fas fa-calendar"></i> Connect Calendar
-            </button>
+            <div class="header-buttons">
+                <button id="connect-calendar" class="connect-btn">
+                    <i class="fas fa-calendar"></i> Connect Calendar
+                </button>
+                <button id="logout-btn" class="connect-btn" style="background-color: #f8f9fe; color: #8898aa; margin-left: 10px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </div>
         
         <div class="messages-container" id="messages">
-            <!-- Messages will be added dynamically -->
+            <!-- Initial welcome message -->
+            <div class="message assistant">
+                <div class="message-content">
+                    <p>Hello! I'm ExecuMate, your AI executive assistant. I can help you order food based on your schedule and preferences. How can I assist you today?</p>
+                </div>
+            </div>
         </div>
         
         <div class="input-container">
@@ -83,6 +652,27 @@
             <button id="send-btn">
                 <i class="fas fa-paper-plane"></i>
             </button>
+        </div>
+        
+        <!-- Calendar View Toggle -->
+        <button id="calendar-toggle" class="calendar-toggle">
+            <i class="fas fa-calendar-alt"></i>
+        </button>
+        
+        <!-- Calendar View Container -->
+        <div id="calendar-container" class="calendar-container">
+            <div class="calendar-header">
+                <div class="calendar-title">Your Calendar</div>
+                <button id="calendar-close" class="calendar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="calendar-events" id="calendar-events">
+                <div class="no-events">
+                    <i class="fas fa-calendar-day fa-3x" style="color: #e0e0e0; margin-bottom: 15px;"></i>
+                    <p>Connect your calendar to see your events</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -126,6 +716,15 @@
             </div>
         </div>
     </template>
+    
+    <!-- Template for calendar event -->
+    <template id="calendar-event-template">
+        <div class="calendar-event">
+            <div class="calendar-event-time"></div>
+            <div class="calendar-event-title"></div>
+            <div class="calendar-event-location"></div>
+        </div>
+    </template>
 
     <!-- Template for food options -->
     <template id="food-options-template">
@@ -147,7 +746,27 @@
         </div>
     </template>
 
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay hidden">
+        <div class="login-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/6295/6295417.png" alt="Calendar Icon">
+            <h2>Welcome to ExecuMate</h2>
+            <p>Your AI assistant that helps you order food based on your calendar schedule. Please connect your Google Calendar to get started.</p>
+            <button id="login-google-btn" class="google-login-btn">
+                <i class="fab fa-google"></i> Connect with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Load Socket.IO -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+    
+    <!-- Set requireLogin from Flask -->
+    <script>
+        window.requireLogin = false;
+    </script>
+    
+    <!-- Load app.js after setting the variable -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

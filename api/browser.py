@@ -99,15 +99,14 @@ async def find_2_lunch_options():
         return MOCK_ITEMS
 
     task = f"""
-    0. Start by going to: https://www.doordash.com/home
-    2. Scroll to 'Try something new' section
-    3. Open the first option under 'Try something new' category on the same tab/page
-    4. From the newly opened tab - extract the restaurant name, restaurant url, delivery time 
-    5. From the newly opened page of restaurant - Extract the item name, item price, and item image URL for the top 3 items listed under the ‘Most Ordered’ section. The item URL is critical.   
+    1. Start by going to: https://www.doordash.com/home
+    2. Open the first option under 'Fastest near you' category on the same tab/page
+    3. From the newly opened tab - extract the restaurant name, restaurant url, delivery time 
+    4. From the newly opened page of restaurant - Extract the item name, item price, and item image URL for the top 3 items listed under the ‘Most Ordered’ section. The item URL is critical.   
     """
     controller = Controller(output_model=MenuItems)
     result = await run_browser_agent(task, controller)
-    return result
+    return result.model_dump()
 
 
 async def run_browser_agent(task: str, controller: Controller):
@@ -125,7 +124,7 @@ async def run_browser_agent(task: str, controller: Controller):
     if result:
         parsed: MenuItems = MenuItems.model_validate_json(result)
         return parsed
-    return []
+    return None
 
 
 async def order_food(restaurant_url: str, item_name: str) -> str:
