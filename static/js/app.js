@@ -253,11 +253,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add click handlers for the buttons
         card1.querySelector('button').addEventListener('click', () => {
-            sendMessage(`I would like to order the ${item1.name} from ${item1.restaurant}`);
+            socket.emit('order', {
+                url: item1.url,
+                name: item1.name,
+                restaurant: item1.restaurant
+            });
         });
         
         card2.querySelector('button').addEventListener('click', () => {
-            sendMessage(`I would like to order the ${item2.name} from ${item2.restaurant}`);
+            socket.emit('order', {
+                url: item2.url,
+                name: item2.name,
+                restaurant: item2.restaurant
+            });
         });
         
         // Add the food options to the messages container

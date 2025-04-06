@@ -80,6 +80,11 @@ def handle_disconnect():
     leave_room(request.sid)
     print(f"Client {request.sid} disconnected")
 
+@socketio.on('order')
+def handle_order(data):
+    print(f"Order received: {data['name']} from {data['restaurant']}")
+    print(f"Order URL: {data['url']}")
+
 @socketio.on('message')
 def handle_message(data):
     user_message = data.get('message', '')
