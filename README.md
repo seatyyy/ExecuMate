@@ -1,88 +1,61 @@
-# ExecuMate - AI Executive Assistant
+# ExecuMate - AI-Powered Meal & Meeting Assistant
 
-ExecuMate is an intelligent executive assistant that helps users order food based on their schedule. It integrates with Google Calendar to provide proactive food ordering reminders before meetings and events. ExecuMate uses Highrise AI for its natural language processing capabilities.
+ExecuMate is an intelligent assistant that helps busy professionals manage their meals and meetings by integrating with Google Calendar. It analyzes your schedule, provides timely meal reminders, and ensures you never miss important events.
 
 ## Features
 
-- 🤖 AI-powered chat interface using Highrise AI models
-- 📅 Google Calendar integration for schedule awareness
-- 🍔 Proactive food ordering reminders
-- ⏰ Smart timing for meal suggestions
-- 💬 Real-time messaging with SocketIO
+- **Google Calendar Integration**: Seamlessly connects with your Google Calendar to analyze your schedule
+- **Smart Meal Reminders**: Sends notifications for meal times based on your meeting schedule
+- **Personalized Experience**: Tailors recommendations to your preferences and availability
+- **Real-time Updates**: Maintains synchronization with calendar changes
 
-## Project Structure
+## Getting Started
 
-```
-ai_food_delivery/
-├── app.py                 # Main Flask application
-├── google_calendar.py     # Google Calendar API integration
-├── requirements.txt       # Python dependencies
-├── static/                # Static files
-│   ├── css/
-│   │   └── style.css      # Main stylesheet
-│   └── js/
-│       └── app.js         # Frontend JavaScript
-└── templates/             # HTML templates
-    ├── index.html         # Main chat interface
-    └── callback_success.html  # Google auth callback page
-```
+### Prerequisites
 
-## Setup Instructions
+- Python 3.7+
+- Google account with Calendar API access
 
-1. **Clone the repository**
+### Installation
 
-2. **Install dependencies**
+1. Clone the repository:
+   ```
+   git clone https://github.com/seatyyy/ExecuMate.git
+   cd ExecuMate
+   ```
+
+2. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables**
-   Create a `.env` file in the project root with the following variables:
-   ```
-   # Highrise AI configuration
-   HIGHRISE_API_KEY=your_highrise_api_key
-   HIGHRISE_BASE_URL=https://api.highrise.ai/api/v1/ai
-   HIGHRISE_MODEL=meta-llama-3-8b-instruct  # Or your preferred Highrise model
-   
-   SECRET_KEY=your_secret_key
-   GOOGLE_CLIENT_SECRET_FILE=path_to_client_secret.json
-   GOOGLE_REDIRECT_URI=http://localhost:5000/api/callback/google
-   
-   # To mock browser agent behaviour
-   MOCK_BROWSER_AGENT=true
-   ```
-
-4. **Set up Google Calendar API**
-   - Go to the [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project
+3. Set up Google Calendar API:
+   - Create a project in [Google Developer Console](https://console.developers.google.com/)
    - Enable the Google Calendar API
-   - Create OAuth 2.0 credentials (Web application type)
-   - Download the client secret JSON file and place it in your project directory
-   - Update the path in your `.env` file
+   - Create OAuth credentials
+   - Download the client secret JSON file and save it as `credentials/client_secret.json`
 
-5. **Run the application**
+4. Configure environment variables:
+   - Copy `.env.template` to `.env`
+   - Update the required environment variables
 
-If you want to use CDP, start chrome in CDP mode: 
-   ```
-   /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
-   ```
+### Usage
+
+1. Start the application:
    ```
    python app.py
    ```
 
-6. **Access the application**
-   Open your browser and navigate to: `http://localhost:5000`
+2. Open your browser and navigate to `http://localhost:8080`
 
-## Usage
+3. Connect your Google Calendar when prompted
 
-1. Connect your Google Calendar using the "Connect Calendar" button
-2. MealMinder will automatically scan your calendar for upcoming events
-3. Based on your schedule, it will suggest ordering food before meetings
-4. You can interact with the assistant to order food, set preferences, or ask questions
+4. ExecuMate will now analyze your schedule and provide meal reminders based on your availability
 
-## Technologies Used
+## Contributing
 
-- **Backend**: Python, Flask, SocketIO
-- **Frontend**: HTML, CSS, JavaScript
-- **APIs**: Highrise AI API, Google Calendar API
-- **Data Storage**: Local file storage for credentials
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
